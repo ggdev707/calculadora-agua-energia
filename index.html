@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Calculadora de água e energia</title>
+
+  <!-- Fonte (opcional: sem internet, o navegador usa a fonte do sistema) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main>
+
+    <!-- Cabeçalho -->
+    <header>
+      <h1>Quanto sua casa gasta com água e luz?</h1>
+      <p class="sub">
+        Preencha os hábitos da casa e veja a estimativa da conta do mês, com dicas para gastar menos.
+        Os valores iniciais são médias aproximadas: ajuste à sua realidade.
+      </p>
+    </header>
+
+    <div class="grid">
+
+      <!-- ===== Coluna 1: formulário ===== -->
+      <form id="f" onsubmit="return false">
+
+        <!-- Água -->
+        <fieldset class="w">
+          <legend>Água</legend>
+
+          <div class="row">
+            <label for="pessoas">Pessoas na casa</label>
+            <input id="pessoas" type="number" min="1" value="4">
+          </div>
+
+          <div class="row">
+            <label for="banho">Minutos de banho por pessoa/dia</label>
+            <input id="banho" type="number" min="0" value="10">
+          </div>
+
+          <div class="row">
+            <label for="vazao">Vazão do chuveiro <small>litros por minuto</small></label>
+            <input id="vazao" type="number" min="1" step="0.5" value="8">
+          </div>
+
+          <div class="row">
+            <label for="outros">Outros usos (pia, descarga, cozinha) <small>litros por pessoa/dia</small></label>
+            <input id="outros" type="number" min="0" value="80">
+          </div>
+
+          <div class="row">
+            <label for="ciclos">Lavagens de roupa por semana <small>cerca de 100 L e 0,5 kWh por ciclo</small></label>
+            <input id="ciclos" type="number" min="0" value="4">
+          </div>
+        </fieldset>
+
+        <!-- Energia -->
+        <fieldset class="e">
+          <legend>Energia</legend>
+
+          <div class="chk">
+            <input id="chuv" type="checkbox" checked>
+            <label for="chuv">Chuveiro elétrico (5.500 W)</label>
+          </div>
+
+          <div class="row">
+            <label for="lamp">Lâmpadas ligadas <small>quantidade</small></label>
+            <input id="lamp" type="number" min="0" value="10">
+          </div>
+
+          <div class="row">
+            <label for="lw">Potência de cada lâmpada <small>watts (LED comum: 10 W)</small></label>
+            <input id="lw" type="number" min="0" value="10">
+          </div>
+
+          <div class="row">
+            <label for="lh">Horas de lâmpada acesa por dia</label>
+            <input id="lh" type="number" min="0" max="24" step="0.5" value="5">
+          </div>
+
+          <div class="row">
+            <label for="ac">Ar-condicionado <small>horas por dia (0 se não tem)</small></label>
+            <input id="ac" type="number" min="0" max="24" step="0.5" value="0">
+          </div>
+
+          <div class="row">
+            <label for="acw">Potência do ar-condicionado <small>watts (9.000 BTU: cerca de 800 W)</small></label>
+            <input id="acw" type="number" min="0" value="800">
+          </div>
+
+          <div class="row">
+            <label for="gel">Geladeira <small>kWh por mês (média: 40)</small></label>
+            <input id="gel" type="number" min="0" value="40">
+          </div>
+
+          <div class="row">
+            <label for="outE">Outros aparelhos (TV, ventilador, etc.) <small>kWh por mês</small></label>
+            <input id="outE" type="number" min="0" value="30">
+          </div>
+        </fieldset>
+
+        <!-- Tarifas -->
+        <div class="tar">
+          <h2>Tarifas</h2>
+
+          <div class="row">
+            <label for="tk">Energia <small>R$ por kWh</small></label>
+            <input id="tk" type="number" min="0" step="0.01" value="0.90">
+          </div>
+
+          <div class="row">
+            <label for="tm">Água e esgoto <small>R$ por m³</small></label>
+            <input id="tm" type="number" min="0" step="0.01" value="8.00">
+          </div>
+
+          <p class="mut">Veja o valor real na sua conta e troque aqui para um resultado mais fiel.</p>
+        </div>
+
+        <button type="button" id="reset">Voltar aos valores iniciais</button>
+      </form>
+
+      <!-- ===== Coluna 2: resultados (preenchidos pelo script.js) ===== -->
+      <section class="res sticky" aria-live="polite">
+        <div class="mut">Estimativa mensal</div>
+        <div class="total" id="total">R$ 0,00</div>
+
+        <!-- Barra: proporção água x energia -->
+        <div class="bar">
+          <i class="bw" id="barw"></i>
+          <i class="be" id="bare"></i>
+        </div>
+
+        <!-- Subtotais -->
+        <div class="two">
+          <div>
+            <span class="mut">Água</span>
+            <b id="rw" class="v-agua"></b>
+            <span class="mut" id="mw"></span>
+          </div>
+          <div>
+            <span class="mut">Energia</span>
+            <b id="re" class="v-energia"></b>
+            <span class="mut" id="me"></span>
+          </div>
+        </div>
+
+        <!-- Detalhe por item -->
+        <table id="det" aria-label="Detalhe do gasto por item"></table>
+
+        <!-- Dicas -->
+        <div class="tips">
+          <strong>Dicas para a sua casa</strong>
+          <div id="tips"></div>
+          <button type="button" id="more">Outras dicas</button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

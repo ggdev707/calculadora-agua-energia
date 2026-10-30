@@ -1,0 +1,260 @@
+
+/* 1. Variáveis (tema claro e escuro) ------------------------------------- */
+:root {
+  --bg: #f7f9fa;
+  --surface: #ffffff;
+  --ink: #0f1a1e;
+  --mut: #667a82;
+  --line: #e4eaed;
+  --water: #0e7c9b;
+  --en: #c98400;
+
+  --radius: 14px;
+  --radius-sm: 8px;
+  --gap: 24px;
+
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d171b;
+    --surface: #142329;
+    --ink: #e8f1f3;
+    --mut: #8fa7af;
+    --line: #243940;
+    --water: #5cc0e6;
+    --en: #f2b93b;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0d171b;
+  --surface: #142329;
+  --ink: #e8f1f3;
+  --mut: #8fa7af;
+  --line: #243940;
+  --water: #5cc0e6;
+  --en: #f2b93b;
+  color-scheme: dark;
+}
+
+/* 2. Base ---------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.55 Manrope, system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+  margin: 8px 0 8px;
+  font-size: clamp(1.7rem, 4.5vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.sub {
+  max-width: 58ch;
+  margin: 0 0 40px;
+  color: var(--mut);
+}
+
+.mut { color: var(--mut); font-size: 0.85rem; }
+
+/* 3. Layout -------------------------------------------------------------- */
+main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+
+@media (min-width: 860px) {
+  .grid { grid-template-columns: 1.1fr 0.9fr; align-items: start; }
+  .sticky { position: sticky; top: 24px; }
+}
+
+/* 4. Formulário ---------------------------------------------------------- */
+fieldset {
+  margin: 0 0 var(--gap);
+  padding: 20px 0 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+legend {
+  float: left;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+legend + * { clear: both; }
+
+/* ponto de cor indica o grupo: azul = água, âmbar = energia */
+legend::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background: currentColor;
+  vertical-align: middle;
+}
+.w legend { color: var(--water); }
+.e legend { color: var(--en); }
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 104px;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+label { font-size: 0.93rem; }
+label small {
+  display: block;
+  color: var(--mut);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+input[type="number"] {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  transition: border-color 0.15s;
+}
+input[type="number"]:hover { border-color: var(--mut); }
+
+.chk {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.chk input { width: 18px; height: 18px; accent-color: var(--en); }
+
+/* 5. Tarifas ------------------------------------------------------------- */
+.tar {
+  margin-bottom: var(--gap);
+  padding: 18px 18px 6px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.tar h2 { margin: 0 0 14px; font-size: 1rem; font-weight: 700; }
+.tar .mut { margin: 0 0 12px; }
+
+/* 6. Resultados ---------------------------------------------------------- */
+.res {
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+}
+
+.total {
+  margin-top: 4px;
+  font-size: clamp(2.4rem, 7vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.bar {
+  display: flex;
+  height: 8px;
+  margin: 20px 0 8px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--line);
+}
+.bar i { display: block; transition: width 0.3s ease; }
+.bw { background: var(--water); }
+.be { background: var(--en); }
+
+.two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 16px 0 20px;
+}
+.two b {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+td { padding: 8px 0; border-bottom: 1px solid var(--line); }
+td:last-child {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+tr:last-child td { border-bottom: 0; }
+
+/* 7. Dicas --------------------------------------------------------------- */
+.tips {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.tip {
+  margin: 12px 0;
+  padding: 2px 0 2px 14px;
+  border-left: 3px solid var(--water);
+  font-size: 0.92rem;
+}
+
+/* 8. Botões -------------------------------------------------------------- */
+button {
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+button:hover { border-color: var(--mut); background: var(--bg); }
+#more { margin-top: 8px; }
+
+/* 9. Acessibilidade ------------------------------------------------------ */
+input:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--water);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
